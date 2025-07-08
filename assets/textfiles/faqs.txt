@@ -1,0 +1,47 @@
+
+1. What is the Harit Index?
+    Ans. The Harit Index is a 0-100 score that reflects the environmental impact of a product based on its manufacturing emissions, packaging, logistics, and certifications.
+
+2. How is the score calculated?
+    Ans. The score is computed using verified data from suppliers, life-cycle assessments, and 	AI-based estimations when full data is not available.
+
+3. Where can I see the Harit Index on products?
+    Ans. It appears as a badge or label on product pages and can be filtered in search and 	category results.
+
+4. How do I know the score is accurate?
+   Ans. All scores are backed by data submitted by vendors and validated by Aurovia's 	scoring engine using standard sustainability benchmarks.
+
+5. Can I trust products with a high Harit Index?
+   Ans. Yes. A high score indicates that the product is more sustainable compared to others in 	its category.
+
+6. What does a low Harit Index mean?
+   Ans. A low score suggests higher emissions, non-recyclable packaging, or lack of sustainability certifications.
+
+7. Can I filter products by Harit Index?
+   Ans. Yes. Our app provides sorting and filtering options to help you choose eco-friendly alternatives.
+
+8. How does this help the environment?
+   Ans.  By choosing high-score products, you help reduce your carbon footprint and support sustainable practices.
+
+9. Do I get rewarded for eco-friendly shopping?
+   Ans. Yes. You can earn GreenPoints for buying sustainable products, which can be redeemed for rewards or donations.
+
+10. Can I track my personal sustainability impact?
+   Ans. Yes. Your My Green Impact dashboard shows total CO? saved and greener alternatives you've chosen.
+
+11. How do I see my product's Harit Index?
+   Ans. You can log into the vendor dashboard and view the Harit score along with its 	contributing factors.
+
+12. What can I do to improve my score?
+   Ans. The dashboard provides actionable insights, such as using recyclable packaging or choosing low-emission shipping methods.
+
+13. What are the benefits of improving my Harit Index?
+   Ans. Products with higher scores get featured in the Eco Leaderboard and receive more 	visibility on the platform.
+
+14. What data do I need to provide?
+   Ans. Basic product details, packaging type, logistics info, energy consumption, and any 	sustainability certifications.
+   
+15. What if I dont have complete data?
+   Ans. Our AI Estimator can predict scores based on available industry data and similar 	product categories.
+
+
