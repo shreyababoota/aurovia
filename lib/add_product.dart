@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddProduct extends StatelessWidget {
@@ -6,12 +8,47 @@ class AddProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var brdr = OutlineInputBorder(borderRadius: BorderRadius.circular(25));
+
     var name = TextEditingController();
     var manuEmission = TextEditingController();
     var materialType = TextEditingController();
     var recyclability = TextEditingController();
     var logisticEmission = TextEditingController();
     var certification = TextEditingController();
+
+    Future<void> addProduct() async {
+      try {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Center(child: CircularProgressIndicator());
+          },
+        );
+
+        final userData =
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .get();
+
+        await FirebaseFirestore.instance.collection('products').add({
+          'uid': FirebaseAuth.instance.currentUser!.uid,
+          'name': name.text.trim(),
+          'by': userData['username'],
+        });
+        Navigator.pop(context);
+
+        var msg = SnackBar(
+          content: Text('Product Successfully added to the database'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(msg);
+        Navigator.pop(context);
+      } catch (e) {
+        Navigator.pop(context);
+        var msg = SnackBar(content: Text(e.toString()));
+        ScaffoldMessenger.of(context).showSnackBar(msg);
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text('Add Product')),
@@ -80,7 +117,7 @@ class AddProduct extends StatelessWidget {
               ), // Certifications
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   var n = name.text;
                   var me = manuEmission.text;
                   var mt = materialType.text;
@@ -123,11 +160,7 @@ class AddProduct extends StatelessWidget {
                     );
                     ScaffoldMessenger.of(context).showSnackBar(msg);
                   } else {
-                    var msg = SnackBar(
-                      content: Text('Product successfully added'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(msg);
-                    Navigator.pop(context);
+                    await addProduct();
                   }
                   name.clear();
                   manuEmission.clear();

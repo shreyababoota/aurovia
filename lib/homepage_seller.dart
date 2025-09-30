@@ -9,15 +9,15 @@ class SellerHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.white, leading: Icon(Icons.menu)),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 400,
-            width: MediaQuery.of(context).size.width,
-            child: Image.asset('assets/images/sus_dev.jpg', fit: BoxFit.fill),
-          ),
-          Expanded(
-            child: Container(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 400,
+              width: MediaQuery.of(context).size.width,
+              child: Image.asset('assets/images/sus_dev.jpg', fit: BoxFit.fill),
+            ),
+            Container(
               width: double.infinity,
               color: Color.fromARGB(255, 79, 94, 3),
               child: Padding(
@@ -29,7 +29,7 @@ class SellerHomePage extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Colors.white,
                       ),
-
+            
                       width: double.infinity,
                       height: 150,
                       child: Padding(
@@ -92,8 +92,8 @@ class SellerHomePage extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SellerSignUpPage extends StatelessWidget {
   const SellerSignUpPage({super.key});
@@ -9,7 +11,47 @@ class SellerSignUpPage extends StatelessWidget {
     var password = TextEditingController();
     var password2 = TextEditingController();
     var mail = TextEditingController();
-    var num = TextEditingController();
+
+    Future<void> createUser() async {
+      try {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Center(child: CircularProgressIndicator());
+          },
+        );
+
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: mail.text.trim(),
+          password: password.text.trim(),
+        );
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({
+              'uid': FirebaseAuth.instance.currentUser!.uid,
+              'email': mail.text.trim(),
+              'username': username.text.trim(),
+              'role': 'seller',
+            });
+
+        Navigator.pop(context);
+
+        var msg = SnackBar(
+          content: Text(
+            'Username succesfully added to the DataBase you may login now',
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(msg);
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        var msg = SnackBar(content: Text(e.message.toString()));
+        ScaffoldMessenger.of(context).showSnackBar(msg);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text('New Seller SignUP')),
       body: Padding(
@@ -21,7 +63,7 @@ class SellerSignUpPage extends StatelessWidget {
               TextField(
                 controller: username,
                 decoration: InputDecoration(
-                  hintText: 'Company Name',
+                  hintText: 'username',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -60,50 +102,20 @@ class SellerSignUpPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              TextField(
-                controller: num,
-                decoration: InputDecoration(
-                  hintText: 'Phone number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
-                  var u = username.text;
+                onPressed: () async {
                   var p = password.text;
                   var p2 = password2.text;
-                  var e = mail.text;
-                  var n = num.text;
-                  if (u.isEmpty ||
-                      p.isEmpty ||
-                      p2.isEmpty ||
-                      e.isEmpty ||
-                      n.isEmpty) {
-                    var msg = SnackBar(
-                      content: Text('Please fill all the fields'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(msg);
-                  } else if (p != p2) {
+
+                  if (p != p2) {
                     var msg = SnackBar(content: Text('Passwords do not match'));
                     ScaffoldMessenger.of(context).showSnackBar(msg);
                   } else {
-                    var msg = SnackBar(
-                      content: Text(
-                        'Username succesfully added to the DataBase you may login now',
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(msg);
-                    Navigator.pop(context);
+                    await createUser();
+                    password2.clear();
+                    password.clear();
+                    mail.clear();
                   }
-
-                  username.clear();
-                  password2.clear();
-                  password.clear();
-                  mail.clear();
-                  num.clear();
                 },
                 child: Text('Register'),
               ),

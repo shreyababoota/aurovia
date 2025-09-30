@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1083241406152",
+    "project_id": "aurovia-f57f0",
+    "storage_bucket": "aurovia-f57f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083241406152:android:3807e04eb868f6e9830ffd",
+        "android_client_info": {
+          "package_name": "com.example.aurovia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmrG9AKs5i0zkY8JELqlp1oOvGmHrttnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

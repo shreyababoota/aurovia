@@ -1,15 +1,62 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CustomerSignUpPage extends StatelessWidget {
   const CustomerSignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var username = TextEditingController();
     var password = TextEditingController();
     var password2 = TextEditingController();
     var mail = TextEditingController();
-    var num = TextEditingController();
+
+    Future<void> createUser() async {
+      final navigator = Navigator.of(context);
+      final messanger = ScaffoldMessenger.of(context);
+
+      try {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Center(child: CircularProgressIndicator());
+          },
+        );
+
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: mail.text.trim(),
+          password: password.text.trim(),
+        );
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({
+              'uid': FirebaseAuth.instance.currentUser!.uid,
+              'role': 'customer',
+              'email': mail.text.trim(),
+            });
+
+        navigator.pop();
+        var msg = SnackBar(
+          content: Text(
+            'Username succesfully added to the DataBase you may login now',
+          ),
+        );
+        messanger.showSnackBar(msg);
+        navigator.pop();
+      } on FirebaseAuthException catch (e) {
+        navigator.pop();
+        var msg = SnackBar(content: Text(e.message.toString()));
+        messanger.showSnackBar(msg);
+      } catch (e) {
+        navigator.pop();
+        messanger.showSnackBar(
+          SnackBar(content: Text('An error occurred: ${e.toString()}')),
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text('New Customer SignUP'), centerTitle: true),
       body: Center(
@@ -18,16 +65,6 @@ class CustomerSignUpPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                controller: username,
-                decoration: InputDecoration(
-                  hintText: 'UserName',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
               TextField(
                 controller: mail,
                 decoration: InputDecoration(
@@ -60,50 +97,21 @@ class CustomerSignUpPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              TextField(
-                controller: num,
-                decoration: InputDecoration(
-                  hintText: 'Phone number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
+
               ElevatedButton(
-                onPressed: () {
-                  var u = username.text;
+                onPressed: () async {
                   var p = password.text;
                   var p2 = password2.text;
-                  var e = mail.text;
-                  var n = num.text;
-                  if (u.isEmpty ||
-                      p.isEmpty ||
-                      p2.isEmpty ||
-                      e.isEmpty ||
-                      n.isEmpty) {
-                    var msg = SnackBar(
-                      content: Text('Please fill all the fields'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(msg);
-                  } else if (p != p2) {
+                  if (p != p2) {
                     var msg = SnackBar(content: Text('Passwords do not match'));
                     ScaffoldMessenger.of(context).showSnackBar(msg);
                   } else {
-                    var msg = SnackBar(
-                      content: Text(
-                        'Username succesfully added to the DataBase you may login now',
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(msg);
-                    Navigator.pop(context);
+                    await createUser();
                   }
 
-                  username.clear();
                   password2.clear();
                   password.clear();
                   mail.clear();
-                  num.clear();
                 },
                 child: Text(
                   'Register',
